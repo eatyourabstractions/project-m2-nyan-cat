@@ -1,6 +1,22 @@
 // We create an instance of the Engine class. Looking at our index.html,
 // we see that it has a div with an id of `"app"`
-const gameEngine = new Engine(document.getElementById('app'));
+let gameEngine = new Engine(document.getElementById('app'));
+let time = 0;
+const timer = () =>{
+  console.log('timer called')
+  if(time === 10 && gameEngine.lives > 0){
+    window.alert('congrats you won');
+    clearTimeout(time);
+    gameEngine.lives = 3;
+    return;
+  } else{
+    time++;
+    setTimeout(timer, 1000)
+  }
+}
+
+
+document.getElementsByTagName('body')[0].style.backgroundColor = 'tomato';
 
 // keydownHandler is a variable that refers to a function. The function has one parameter
 // (does the parameter name matter?) which is called event. As we will see below, this function
@@ -18,6 +34,8 @@ const keydownHandler = (event) => {
   if (event.code === 'ArrowRight') {
     gameEngine.player.moveRight();
   }
+
+  
 };
 
 // We add an event listener to document. document the ancestor of all DOM nodes in the DOM.

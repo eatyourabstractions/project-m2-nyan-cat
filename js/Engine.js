@@ -15,7 +15,24 @@ class Engine {
     // that contains instances of the Enemy class
     this.enemies = [];
     // We add the background image to the game
-    addBackground(this.root);
+    this.whitebox = addBackground(this.root);
+    this.whitebox = this.whitebox;
+    this.start = this.start;
+    
+
+    this.lives = 3;
+    this.resizeTime = 0;
+    this.body = document.getElementsByTagName('body')[0];
+    this.body.style.display = 'flex';
+    this.body.style.justifyContent = 'space-evenly';
+    this.body.style.alignItems = 'start';
+    this.body.style.marginTop = '30px';
+    document.getElementById('startBtn').addEventListener('click', () =>{
+      MAX_ENEMIES = 3;
+      setTimeout(this.gameLoop, 20);
+      timer();
+    })
+    
   }
 
   // The gameLoop will run every few milliseconds. It does several things
@@ -31,6 +48,12 @@ class Engine {
     }
 
     let timeDiff = new Date().getTime() - this.lastFrame;
+    
+    if(this.resizeTime < 1100){
+      this.resizeTime += timeDiff;
+    } else{
+      this.resizeTime = 0;
+    }
 
     this.lastFrame = new Date().getTime();
     // We use the number of milliseconds since the last call to gameLoop to update the enemy positions.
@@ -38,6 +61,10 @@ class Engine {
     this.enemies.forEach((enemy) => {
       enemy.update(timeDiff);
     });
+
+
+
+    
 
     // We remove all the destroyed enemies from the array referred to by \`this.enemies\`.
     // We use filter to accomplish this.
@@ -57,17 +84,68 @@ class Engine {
     // We check if the player is dead. If he is, we alert the user
     // and return from the method (Why is the return statement important?)
     if (this.isPlayerDead()) {
+      MAX_ENEMIES = 0;
+      if(this.lives === 0){
       window.alert('Game over');
+      this.lives = 2;
       return;
+      } else {
+        this.lives--;
+        window.alert(`ouch! you still have ${this.lives} left`);
+        clearTimeout(timer)
+        return;
+      }
+      
     }
 
     // If the player is not dead, then we put a setTimeout to run the gameLoop in 20 milliseconds
     setTimeout(this.gameLoop, 20);
+    
   };
 
   // This method is not implemented correctly, which is why
   // the burger never dies. In your exercises you will fix this method.
   isPlayerDead = () => {
-    return false;
+
+    if(this.resizeTime > 1000){
+      let nextColor = this.generateRandomColor();
+      this.body.style.backgroundColor = nextColor;
+      this.whitebox.style.backgroundColor = nextColor;
+      
+      
+    }
+    
+    for(let i = 0; i < this.enemies.length; i++){
+      if(this.collisionDetected(this.enemies[i])){
+        return true
+      } else {return false}
+    }
+
   };
+
+  collisionDetected(enemy){
+    if((this.player.y - enemy.y) < 0 && this.player.x === enemy.x){
+      return true
+    } else{ return false}
+  }
+ 
+   generateRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+    
+  
+
+  
+
+   getRandomNumberBetween(min,max){
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
+ 
+
+  
 }

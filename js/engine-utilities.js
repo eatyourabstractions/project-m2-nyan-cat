@@ -49,11 +49,26 @@ const addBackground = (root) => {
 
   // We add it to the root DOM node
   root.append(bg);
+  root.style.position = 'relative';
+  
 
   // We don't want the enemies to go beyond the lower edge of the image
   // so we place a white div to hide the enemies after they reach the bottom.
   // To see what it does, you can comment out all the remaining lines in the function to see the effect.
   const whiteBox = document.createElement('div');
+  whiteBox.style.display = 'flex';
+  whiteBox.style.justifyContent = 'center';
+  whiteBox.style.alignItems = 'center';
+  
+  const startBtn = document.createElement('button');
+  startBtn.style.padding = '20px 40px 20px 40px';
+  startBtn.style.borderRadius = '10px'
+  startBtn.style.fontSize = '20px';
+  startBtn.style.backgroundColor = 'whitesmoke'
+  startBtn.setAttribute('id', 'startBtn')
+
+  startBtn.innerText = 'Start'
+  whiteBox.appendChild(startBtn);
 
   // We put a high z-index so that the div is placed over all other DOM nodes
   whiteBox.style.zIndex = 100;
@@ -63,4 +78,5 @@ const addBackground = (root) => {
   whiteBox.style.width = `${GAME_WIDTH}px`;
   whiteBox.style.background = '#fff';
   root.append(whiteBox);
+  return whiteBox
 };
